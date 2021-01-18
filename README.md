@@ -1,4 +1,4 @@
-[![Maintainability](https://api.codeclimate.com/v1/badges/cfc752577cf502adf125/maintainability)](https://codeclimate.com/github/propero-oss/easy-store/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d480dbca4abda5c97760/maintainability)](https://codeclimate.com/github/propero-oss/easy-store-react/maintainability)
 
 # easy-store
 React bindings for [@propero/easy-store](https://github.com/propero-oss/easy-store).
