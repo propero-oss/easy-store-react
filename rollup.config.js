@@ -3,17 +3,20 @@ import commonjs from "@rollup/plugin-commonjs";
 import ts from "@wessberg/rollup-plugin-ts";
 import paths from "rollup-plugin-ts-paths";
 import nodeResolve from "@rollup/plugin-node-resolve";
-import json from "@rollup/plugin-json";
 import { terser } from "rollup-plugin-terser";
 import { keys, mapValues, upperFirst, camelCase, template } from "lodash";
 import pkg from "./package.json";
 
-const { main, dependencies, module, unpkg } = pkg;
-const formatModule = (name) => upperFirst(camelCase(name.indexOf("@") !== -1 ? name.split("/")[1] : name));
-const yearRange = (date) => (new Date().getFullYear() === +date ? date : `${date} - ${new Date().getFullYear()}`);
+const { main, dependencies, peerDependencies, module, unpkg } = pkg;
+const formatModule = (name) =>
+  upperFirst(camelCase(name.indexOf("@") !== -1 ? name.split("/")[1] : name));
+const yearRange = (date) =>
+  new Date().getFullYear() === +date ? date : `${date} - ${new Date().getFullYear()}`;
 const year = yearRange(pkg.since || new Date().getFullYear());
-const external = keys(dependencies || {});
-const globals = mapValues(dependencies || {}, (value, key) => formatModule(key));
+const external = keys({ ...peerDependencies, ...dependencies } || {});
+const globals = mapValues({ ...peerDependencies, ...dependencies } || {}, (value, key) =>
+  formatModule(key)
+);
 const name = formatModule(pkg.name);
 /* eslint-disable */
 const banner = template(`
@@ -53,8 +56,9 @@ export default {
     paths(),
     commonjs(),
     nodeResolve(),
-    json({ compact: true }),
     ts({ tsconfig: "tsconfig.build.json" }),
-    terser({ output: { comments: (node, comment) => /@preserve|@license|@cc_on/i.test(comment.value) } }),
+    terser({
+      output: { comments: (node, comment) => /@preserve|@license|@cc_on/i.test(comment.value) },
+    }),
   ],
 };
